@@ -1,0 +1,28 @@
+#To import dataset HouseVotes84
+install.packages("mlbench")
+library(mlbench)
+data(HouseVotes84)
+
+dataset=HouseVotes84
+table(dataset$Class)
+
+#Splitting the dataset into Test and Train
+library(caTools)
+set.seed(1301)
+split=sample.split(dataset$Class,SplitRatio = 0.70)
+train=subset(dataset,split==TRUE)
+test=subset(dataset,split==FALSE)
+
+# Fitting SVM to the Training set
+# install.packages('e1071')
+library(e1071)
+classifier = naiveBayes(x = train[-1],
+                        y = train$Class)
+
+# Predicting the Test set results
+y_pred = predict(classifier, newdata = test[-1])
+
+
+# Making the Confusion Matrix
+cm = table(test[, 1], y_pred)
+cm
